@@ -1,0 +1,53 @@
+{
+  "name": "advd-backend",
+  "version": "1.0.0",
+  "description": "AdvD - Digital Court Diary & Advocate Case Management System API",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "tsx src/test/test-runner.ts",
+    "seed": "tsx src/scripts/seed.ts"
+  },
+  "keywords": [
+    "legal",
+    "court-diary",
+    "advocate",
+    "multi-tenant",
+    "case-management"
+  ],
+  "author": "AdvD Team",
+  "license": "ISC",
+  "dependencies": {
+    "@types/multer": "^2.3.0",
+    "@types/pdfkit": "^0.17.7",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.11.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "exceljs": "^4.4.0",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.1",
+    "morgan": "^1.10.0",
+    "multer": "^2.5.0",
+    "pdfkit": "^0.20.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.13.4",
+    "@types/supertest": "^7.2.1",
+    "supertest": "^7.3.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}
