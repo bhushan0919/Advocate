@@ -1,6 +1,15 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+/**
+ * Resolves the API base URL from Vite environment variables.
+ * - In local development with Vite dev server proxy: defaults to '/api'
+ * - In production (e.g. deployed on Netlify): uses VITE_API_URL, automatically ensuring '/api' path suffix
+ *   regardless of whether the user specified "https://advd-api.onrender.com" or "https://advd-api.onrender.com/api".
+ */
+const rawApiUrl = (import.meta.env.VITE_API_URL || '').trim().replace(/\/+$/, '');
+export const API_BASE_URL = rawApiUrl
+  ? (rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl}/api`)
+  : '/api';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

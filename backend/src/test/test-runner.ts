@@ -11,6 +11,7 @@ const runScript = (scriptName: string): Promise<void> => {
       stdio: 'inherit',
       shell: true,
       cwd: process.cwd(),
+      env: { ...process.env, CLOUDINARY_TEST_MOCK: '1' },
     });
 
     proc.on('close', (code) => {

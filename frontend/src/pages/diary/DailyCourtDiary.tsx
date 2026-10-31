@@ -20,6 +20,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { diaryApi } from '../../api/diary.api.ts';
+import { reportsApi } from '../../api/reports.api.ts';
 import { DiaryEntry } from '../../types/diary.ts';
 import { CaseRecord } from '../../types/case.ts';
 import { UpdateHearingModal } from './UpdateHearingModal.tsx';
@@ -51,6 +52,23 @@ export const DailyCourtDiary: React.FC = () => {
   // Update Hearing Modal State
   const [selectedCaseForUpdate, setSelectedCaseForUpdate] = useState<CaseRecord | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+
+  const handleExportPdf = async () => {
+    try {
+      setIsExportingPdf(true);
+      await reportsApi.exportPdf('daily-diary', {
+        startDate: selectedDate,
+        endDate: selectedDate,
+        lang: language,
+      });
+    } catch (err: any) {
+      console.error('Failed to export daily diary PDF:', err);
+      alert(err.response?.data?.message || 'Failed to export daily diary PDF.');
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
 
   // Fetch Daily Diary Cases
   const {
@@ -182,16 +200,15 @@ export const DailyCourtDiary: React.FC = () => {
             <span>{t('common.print')}</span>
           </button>
 
-          <a
-            href={`/api/reports/export/pdf?reportType=daily-diary&startDate=${selectedDate}&endDate=${selectedDate}&lang=${language}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-legal-900 hover:bg-legal-800 text-white text-xs font-semibold transition-colors shadow-sm"
+          <button
+            onClick={handleExportPdf}
+            disabled={isExportingPdf}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-legal-900 hover:bg-legal-800 text-white text-xs font-semibold transition-colors shadow-sm disabled:opacity-50"
             title={t('common.exportPdf')}
           >
             <Download className="w-3.5 h-3.5" />
-            <span>{t('common.exportPdf')}</span>
-          </a>
+            <span>{isExportingPdf ? t('common.loading', 'Exporting...') : t('common.exportPdf')}</span>
+          </button>
         </div>
       </div>
 

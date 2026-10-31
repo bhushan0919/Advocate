@@ -9,6 +9,9 @@ cloudinary.config({
 });
 
 export const isCloudinaryConfigured = (): boolean => {
+  if (process.env.CLOUDINARY_TEST_MOCK === '1') {
+    return false;
+  }
   return Boolean(
     ENV.CLOUDINARY_CLOUD_NAME &&
     ENV.CLOUDINARY_API_KEY &&

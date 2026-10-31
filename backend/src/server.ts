@@ -16,7 +16,8 @@ const startServer = async () => {
       console.log(`===============================================`);
       console.log(` AdvD Legal SaaS API running on port ${ENV.PORT}`);
       console.log(` Mode: ${ENV.NODE_ENV}`);
-      console.log(` URL:  http://localhost:${ENV.PORT}`);
+      console.log(` API Base URL: ${ENV.API_URL || `http://localhost:${ENV.PORT}`}`);
+      console.log(` Allowed Frontend: ${ENV.APP_URL}`);
       console.log(`===============================================`);
     });
 

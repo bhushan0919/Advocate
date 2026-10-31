@@ -211,7 +211,7 @@ const runTests = async () => {
 
     const migratedUserB = await User.findById(userBId);
     assert(
-      migratedUserB?.avatar?.startsWith('https://') || migratedUserB?.avatar?.includes('res.cloudinary.com'),
+      Boolean(migratedUserB?.avatar?.startsWith('https://') || migratedUserB?.avatar?.includes('res.cloudinary.com')),
       'Legacy Base64 avatar successfully migrated to Cloudinary secure URL'
     );
     assert(
@@ -231,6 +231,7 @@ const runTests = async () => {
     if (failed > 0) {
       process.exit(1);
     }
+    process.exit(0);
   } catch (err: any) {
     console.error('Test suite failed with unexpected error:', err);
     process.exit(1);

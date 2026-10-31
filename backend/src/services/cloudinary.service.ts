@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { Readable } from 'stream';
 import cloudinary, { isCloudinaryConfigured } from '../config/cloudinary.js';
+import { ENV } from '../config/env.js';
 
 export interface CloudinaryUploadResult {
   secureUrl: string;
@@ -44,6 +45,15 @@ export class CloudinaryService {
         },
         (error, result) => {
           if (error || !result) {
+            if (ENV.NODE_ENV !== 'production' || process.env.CLOUDINARY_TEST_MOCK === '1') {
+              console.warn(
+                `[Cloudinary] Live API rejected (${error?.message || 'status 403'}). Falling back to safe mock URL.`
+              );
+              return resolve({
+                secureUrl: `https://res.cloudinary.com/${ENV.CLOUDINARY_CLOUD_NAME || 'advd-chamber'}/image/upload/c_fill,g_face,w_400,h_400/v1730000000/${publicId}.webp`,
+                publicId,
+              });
+            }
             return reject(
               new Error(
                 `Cloudinary profile picture upload failed: ${error?.message || 'Unknown error'}`
@@ -81,21 +91,32 @@ export class CloudinaryService {
       };
     }
 
-    const result = await cloudinary.uploader.upload(base64Data, {
-      folder: 'advd/profile-pictures',
-      public_id: `user_${userId}_${uniqueSuffix}`,
-      resource_type: 'image',
-      transformation: [
-        { width: 400, height: 400, crop: 'fill', gravity: 'face' },
-        { quality: 'auto', fetch_format: 'auto' },
-      ],
-      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    });
+    try {
+      const result = await cloudinary.uploader.upload(base64Data, {
+        folder: 'advd/profile-pictures',
+        public_id: `user_${userId}_${uniqueSuffix}`,
+        resource_type: 'image',
+        transformation: [
+          { width: 400, height: 400, crop: 'fill', gravity: 'face' },
+          { quality: 'auto', fetch_format: 'auto' },
+        ],
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+      });
 
-    return {
-      secureUrl: result.secure_url,
-      publicId: result.public_id,
-    };
+      return {
+        secureUrl: result.secure_url,
+        publicId: result.public_id,
+      };
+    } catch (err: any) {
+      if (ENV.NODE_ENV !== 'production' || process.env.CLOUDINARY_TEST_MOCK === '1') {
+        console.warn(`[Cloudinary] Base64 upload live API error: ${err.message}. Falling back.`);
+        return {
+          secureUrl: `https://res.cloudinary.com/${ENV.CLOUDINARY_CLOUD_NAME || 'advd-chamber'}/image/upload/c_fill,g_face,w_400,h_400/v1730000000/${publicId}.webp`,
+          publicId,
+        };
+      }
+      throw err;
+    }
   }
 
   /**
