@@ -19,7 +19,10 @@ build/
 !.env.example
 
 # File uploads and local storage
-uploads/
+uploads/*
+!uploads/.gitkeep
+!uploads/documents/
+!uploads/documents/.gitkeep
 temp/
 tmp/
 

@@ -2,15 +2,27 @@
   "name": "advd-root",
   "version": "1.0.0",
   "description": "AdvD - Digital Court Diary & Advocate Case Management System",
+  "private": true,
   "scripts": {
-    "dev:backend": "cd backend && npm run dev",
-    "dev:frontend": "cd frontend && npm run dev",
-    "test:backend": "cd backend && npm test",
-    "seed:backend": "cd backend && npm run seed",
-    "build:backend": "cd backend && npm run build",
-    "build:frontend": "cd frontend && npm run build"
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "build": "npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:all": "npm --prefix backend run build && npm --prefix frontend run build",
+    "start": "npm --prefix backend start",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "test": "npm --prefix backend test",
+    "test:backend": "npm --prefix backend test",
+    "seed": "npm --prefix backend run seed",
+    "seed:backend": "npm --prefix backend run seed"
   },
-  "keywords": ["legal-saas", "court-diary", "advocate-management", "multi-tenant"],
+  "keywords": [
+    "legal-saas",
+    "court-diary",
+    "advocate-management",
+    "multi-tenant"
+  ],
   "author": "AdvD Team"
 }
 

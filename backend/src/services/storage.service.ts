@@ -31,7 +31,9 @@ class StorageService {
   constructor() {
     this.baseDir =
       process.env.DOCUMENT_STORAGE_DIR ||
-      path.resolve(process.cwd(), 'uploads/documents');
+      (process.cwd().endsWith('backend')
+        ? path.resolve(process.cwd(), 'uploads/documents')
+        : path.resolve(process.cwd(), 'backend/uploads/documents'));
 
     if (!fs.existsSync(this.baseDir)) {
       fs.mkdirSync(this.baseDir, { recursive: true });
