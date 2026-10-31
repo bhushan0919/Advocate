@@ -1,199 +1,304 @@
-# AdvD — Advocate Digital Court Diary & Case Management System
+# ⚖️ Advocate Diary – Legal Practice Management System
 
-> **Tagline:** *"Every Case. Every Hearing. One Diary."*
+<p align="center">
+  A Digital Workspace for Advocates and Their Clerks
+</p>
 
-AdvD is a production-grade, multi-tenant Legal SaaS application built to digitize and replace traditional handwritten Indian advocate court diaries while strictly guaranteeing zero cross-workspace data leakage between independent legal chambers.
-
----
-
-## 🏗 System & Production Architecture
-
-```
-                                      +------------------------------------+
-                                      |            Client Browser          |
-                                      +-----------------+------------------+
-                                                        |
-                                       HTTPS Requests   |
-                         +------------------------------+-----------------------------+
-                         |                                                            |
-                         v                                                            v
-        +----------------------------------+                        +----------------------------------+
-        |         NETLIFY FRONTEND         |                        |          RENDER BACKEND          |
-        |      (React 18 + Vite + TS)      |                        |    (Node.js + Express + TS)      |
-        |----------------------------------|                        |----------------------------------|
-        | - SPA Client-Side Routing        |  REST API Calls        | - JWT Authentication & RBAC      |
-        | - Tailored Legal Design System   |----------------------->| - Multi-Tenant Workspace Guard   |
-        | - Full Marathi Devanagari i18n   |  (Bearer Token / CORS) | - Dynamic Daily Court Diary      |
-        | - Responsive Dashboard & Register|                        | - Hearing Calendar Engine        |
-        | - PDF & Excel Report Triggers    |                        | - Automated Reminders Scheduler  |
-        +----------------------------------+                        +----------------+-----------------+
-                                                                                     |
-                                                        +----------------------------+----------------------------+
-                                                        |                                                         |
-                                                        v                                                         v
-                                      +------------------------------------+                    +------------------------------------+
-                                      |        MONGODB ATLAS (Cloud)       |                    |         CLOUDINARY (Cloud)         |
-                                      |------------------------------------|                    |------------------------------------|
-                                      | - Multi-tenant compound indexed    |                    | - Advocate headshot storage        |
-                                      |   isolated legal collections       |                    | - Automatic face-aware crop        |
-                                      | - Activity logs & audit trails     |                    | - Optimized WebP transformations   |
-                                      +------------------------------------+                    +------------------------------------+
-```
+<p align="center">
+  <a href="https://advocatedi.vercel.app/">
+    <img src="https://img.shields.io/badge/Live_Demo-Visit_Application-2ea44f?style=for-the-badge" alt="Live Demo"/>
+  </a>
+  <img src="https://img.shields.io/badge/React-TypeScript-3178C6?style=for-the-badge&logo=react&logoColor=white" alt="React"/>
+  <img src="https://img.shields.io/badge/Node.js-Backend-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js"/>
+  <img src="https://img.shields.io/badge/Express.js-API-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express"/>
+  <img src="https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB"/>
+</p>
 
 ---
 
-## 📂 Production Folder Structure
+## 📌 Overview
 
-The repository is structured as a clean, decoupled monorepo:
+**Advocate Diary** is a full-stack legal practice management application designed to help advocates organize and manage their daily professional activities through a centralized digital workspace.
 
+The platform provides tools for managing clients, cases, hearing schedules, legal activities, and other practice-related information.
+
+It supports individual workspaces for advocates and controlled access for their invited clerks, allowing legal professionals to collaborate while maintaining workspace-level data isolation.
+
+The application is built using React, TypeScript, Node.js, Express.js, and MongoDB.
+
+🔗 **Live Application:** https://advocatedi.vercel.app/
+
+---
+
+## 🎯 Problem Statement
+
+Managing multiple legal cases, client records, hearing dates, and daily professional activities manually can become challenging for advocates.
+
+Traditional paper-based diaries and disconnected records make it difficult to organize information and keep track of important legal activities.
+
+Advocate Diary aims to simplify these workflows by providing a centralized digital solution for legal practice management.
+
+---
+
+## ✨ Key Features
+
+- 🔐 **Authentication:** Secure user authentication using JWT.
+- 👥 **Role-Based Access:** Dedicated access for Advocates and Clerks.
+- 🏢 **Multi-Tenant Workspaces:** Individual workspaces for advocates.
+- 🤝 **Clerk Invitations:** Advocates can invite clerks to collaborate.
+- 🔒 **Workspace Isolation:** Clerk access is restricted to the associated advocate's workspace.
+- 📁 **Case Management:** Organize and manage legal case information.
+- 👤 **Client Management:** Maintain client-related information.
+- 📅 **Hearing Management:** Manage important hearing dates and schedules.
+- 📖 **Digital Diary:** Organize daily legal activities.
+- 📊 **Dashboard:** Centralized interface for legal practice activities.
+- 📱 **Responsive UI:** Accessible across desktop and mobile devices.
+
+*Note: The feature list reflects the intended functional scope. Keep individual modules listed here only if they are working in the deployed application.*
+
+---
+
+## 👥 User Roles
+
+### 1. Advocate
+
+- Register and securely access an individual workspace.
+- Manage workspace access.
+- Invite clerks to collaborate.
+- Access the advocate dashboard.
+- Organize legal practice information.
+- Manage cases, clients, and hearing schedules.
+
+### 2. Clerk
+
+- Access the workspace of the advocate who invited them.
+- Assist with assigned legal practice activities.
+- Access information according to their permissions.
+- Work within the associated advocate's workspace.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- React.js
+- TypeScript
+- Tailwind CSS
+
+### Backend
+- Node.js
+- Express.js
+- TypeScript
+- REST APIs
+
+### Database
+- MongoDB
+- Mongoose
+
+### Authentication & Security
+- JSON Web Tokens (JWT)
+- Role-Based Access Control
+- Workspace-Level Authorization
+
+### Deployment
+- Vercel – Frontend Hosting
+- Add actual backend hosting provider here.
+
+---
+
+## 🏗️ System Architecture
+
+The application follows a client-server architecture with workspace-aware authorization.
+
+```text
+               ┌────────────────────────┐
+               │    React + TypeScript  │
+               │       Frontend         │
+               │       (Vercel)         │
+               └───────────┬────────────┘
+                           │
+                        REST APIs
+                           │
+               ┌───────────▼────────────┐
+               │      Express.js        │
+               │    Node.js + TypeScript│
+               │       Backend          │
+               └───────────┬────────────┘
+                           │
+               ┌───────────▼────────────┐
+               │ Authentication &       │
+               │ Authorization          │
+               │ JWT + Role + Workspace │
+               └───────────┬────────────┘
+                           │
+               ┌───────────▼────────────┐
+               │       MongoDB          │
+               │      Mongoose          │
+               └────────────────────────┘
 ```
-advd/
-├── backend/                             # Express REST API (Node.js & TypeScript)
-│   ├── assets/                          # Static assets required for report rendering
-│   │   └── fonts/                       # Unicode Devanagari fonts (Nirmala.ttf, NirmalaB.ttf)
-│   ├── src/
-│   │   ├── config/                      # Database (Atlas), Cloudinary, and Environment setup
-│   │   ├── controllers/                 # Express route controllers (Auth, Cases, Diary, etc.)
-│   │   ├── middleware/                  # JWT Auth, Multi-tenant guard, RBAC, File upload, Validation
-│   │   ├── models/                      # Mongoose models & strict multi-tenant schemas
-│   │   ├── routes/                      # Modular REST API routes mounted under /api
-│   │   ├── scripts/                     # Seed scripts & avatar migration utilities
-│   │   ├── services/                    # Business logic (Reminders, Scheduler, PDFKit, ExcelJS)
-│   │   ├── test/                        # Automated test suites (300+ test cases)
-│   │   ├── utils/                       # Date utilities, token generators, and helpers
-│   │   ├── app.ts                       # Express application initialization & CORS
-│   │   └── server.ts                    # Production entrypoint & graceful shutdown
-│   ├── uploads/                         # Ephemeral document storage (.gitkeep, ignored in Git)
-│   ├── .env                             # Local environment variables (ignored in Git)
-│   ├── .env.example                     # Environment template for Render deployment
-│   ├── .gitignore                       # Backend ignore rules
-│   ├── package.json                     # Backend dependencies & npm scripts
-│   └── tsconfig.json                    # TypeScript configuration for NodeNext
+
+---
+
+## 🖥️ Application Screenshots
+
+Add actual application screenshots inside the `screenshots/` directory.
+
+### Application Dashboard
+
+![Application Dashboard](screenshots/dashboard.png)
+
+### Advocate Workspace
+
+![Advocate Workspace](screenshots/advocate-workspace.png)
+
+### Clerk Workspace
+
+![Clerk Workspace](screenshots/clerk-workspace.png)
+
+### Case Management
+
+![Case Management](screenshots/case-management.png)
+
+### Client Management
+
+![Client Management](screenshots/client-management.png)
+
+### Hearing Calendar
+
+![Hearing Calendar](screenshots/hearing-calendar.png)
+
+---
+
+## 📂 Project Structure
+
+```text
+Advocate/
 │
-├── frontend/                            # Single-Page Web Client (React 18 & Vite)
-│   ├── public/                          # Static web assets (SVG Favicon)
-│   │   └── vite.svg
-│   ├── src/
-│   │   ├── api/                         # Centralized Axios client & typed endpoint APIs
-│   │   ├── components/                  # UI components, layout shell, Topbar, Sidebar
-│   │   ├── context/                     # AuthContext (workspace state) & Theme/Language context
-│   │   ├── i18n/                        # i18next internationalization configuration
-│   │   ├── locales/                     # Translation dictionaries (English & Marathi Devanagari)
-│   │   ├── pages/                       # Route views (Cases, Diary, Hearings, Tasks, Settings)
-│   │   ├── types/                       # Shared TypeScript models and API interfaces
-│   │   ├── App.tsx                      # Root route declarations & QueryClientProvider
-│   │   ├── index.css                    # Tailwind CSS directives & global typography
-│   │   ├── main.tsx                     # DOM render entrypoint
-│   │   └── vite-env.d.ts                # Vite environment typings
-│   ├── .env                             # Local frontend environment (ignored in Git)
-│   ├── .env.example                     # Environment template for Netlify deployment
-│   ├── .gitignore                       # Frontend ignore rules
-│   ├── index.html                       # HTML entry point with Google Fonts
-│   ├── netlify.toml                     # Netlify build, SPA rewrite, & security headers
-│   ├── package.json                     # Frontend dependencies & npm scripts
-│   ├── postcss.config.js                # PostCSS plugins
-│   ├── tailwind.config.js               # Legal theme design tokens & colors
-│   ├── tsconfig.json                    # TypeScript configuration for Vite
-│   └── vite.config.ts                   # Vite bundler configuration & local dev proxy
+├── apps/
+│   ├── api/
+│   │   ├── src/
+│   │   │   ├── config/
+│   │   │   ├── controllers/
+│   │   │   ├── middleware/
+│   │   │   ├── models/
+│   │   │   ├── routes/
+│   │   │   ├── services/
+│   │   │   └── server.ts
+│   │   └── package.json
+│   │
+│   └── web/
+│       ├── src/
+│       └── package.json
 │
-├── .gitignore                           # Repository-wide ignore rules
-├── netlify.toml                         # Monorepo root Netlify configuration
-├── package.json                         # Root orchestration scripts (build, test, dev)
-├── README.md                            # Comprehensive project & deployment documentation
-├── render.yaml                          # Render Blueprint for automated Web Service provisioning
-├── run.bat                              # One-click Windows launch script
-└── run.ps1                              # One-click PowerShell launch script
+├── screenshots/
+├── package.json
+├── .gitignore
+└── README.md
 ```
 
----
-
-## 🚀 Step-by-Step Production Deployment Guide
-
-### Phase 1: Deploy Backend on Render
-
-1. **Log in to [Render](https://render.com/)** and click **New + > Web Service**.
-2. Connect your Git repository (`advd`).
-3. Set the following build settings:
-   - **Name**: `advd-backend` (or your preferred name)
-   - **Root Directory**: `backend`
-   - **Environment**: `Node`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm start`
-   - **Health Check Path**: `/health`
-4. Under **Environment Variables**, add:
-   | Key | Example Value | Description |
-   |---|---|---|
-   | `NODE_ENV` | `production` | Enables production optimizations |
-   | `PORT` | `10000` *(Render sets this automatically)* | Port Express listens on |
-   | `MONGODB_URI` | `mongodb+srv://user:pass@cluster.mongodb.net/advd?retryWrites=true&w=majority` | MongoDB Atlas URI |
-   | `JWT_ACCESS_SECRET` | *(64-character random string)* | Access token secret |
-   | `JWT_REFRESH_SECRET` | *(64-character random string)* | Refresh token secret |
-   | `CORS_ORIGIN` | `https://your-app.netlify.app` | Netlify frontend URL |
-   | `APP_URL` | `https://your-app.netlify.app` | Used for invitations & reset links |
-   | `API_URL` | `https://advd-backend.onrender.com` | Public backend URL |
-   | `CLOUDINARY_CLOUD_NAME` | `your_cloud_name` | Cloudinary credentials |
-   | `CLOUDINARY_API_KEY` | `your_api_key` | Cloudinary credentials |
-   | `CLOUDINARY_API_SECRET` | `your_api_secret` | Cloudinary credentials |
-5. Click **Create Web Service**. Once deployed, copy your Render public URL (e.g., `https://advd-backend.onrender.com`).
+*Illustrative structure. Adjust the folders to match the actual repository.*
 
 ---
 
-### Phase 2: Deploy Frontend on Netlify
-
-1. **Log in to [Netlify](https://www.netlify.com/)** and click **Add new site > Import an existing project**.
-2. Connect the same Git repository (`advd`).
-3. Set the following build settings:
-   - **Base directory**: `frontend`
-   - **Build command**: `npm run build`
-   - **Publish directory**: `dist`
-4. Under **Site configuration > Environment variables**, add:
-   | Key | Value | Description |
-   |---|---|---|
-   | `VITE_API_URL` | `https://advd-backend.onrender.com` | Your deployed Render backend URL |
-5. Click **Deploy Site**.
-   - Netlify will run `npm run build` and deploy the single-page application.
-   - All SPA client-side routes (e.g. `/cases`, `/diary`, `/calendar`, `/settings`) are automatically rewritten to `/index.html` via `netlify.toml`.
-6. Once deployed, copy your Netlify site URL (e.g., `https://your-app.netlify.app`) and update the `CORS_ORIGIN` and `APP_URL` environment variables in your Render Dashboard.
-
----
-
-## 💻 Local Development Workflow
+## ⚙️ Installation & Setup
 
 ### Prerequisites
-- Node.js v18+ (tested on Node.js v22)
-- MongoDB instance running locally on `localhost:27017` or MongoDB Atlas URI
 
-### 1-Click Launch (Windows)
-Double-click `run.bat` or run:
-```powershell
-.\run.ps1
-```
+- Node.js
+- npm
+- MongoDB or MongoDB Atlas
 
-### Manual Command-Line Launch
+### 1. Clone the Repository
+
 ```bash
-# Install dependencies for both apps
-npm run install:all
+git clone https://github.com/bhushan0919/Advocate.git
 
-# Start backend dev server (Port 5000)
-npm run dev:backend
-
-# Start frontend dev server (Port 5173 with Vite proxy)
-npm run dev:frontend
+cd Advocate
 ```
 
-### Run Automated Backend Test Suites
+### 2. Install Dependencies
+
 ```bash
-npm run test:backend
+npm install
 ```
+
+If the repository uses separate package files for frontend and backend, install dependencies in their respective directories.
+
+### 3. Environment Configuration
+
+Create the required `.env` files using `.env.example` as a reference.
+
+Configure the following values according to your application:
+
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CORS_ORIGIN=http://localhost:5173
+```
+
+Frontend configuration:
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+Never commit real credentials or production environment files.
+
+### 4. Run the Application
+
+Use the development scripts defined in the respective `package.json` files to start the backend and frontend.
 
 ---
 
-## 🧪 Pre-Configured Fictional Test Accounts
+## 🚀 Deployment
 
-| Role | Name | Email | Password | Chamber Workspace |
-|---|---|---|---|---|
-| **Advocate (Owner)** | Adv. Rajesh Sharma | `rajesh.sharma@advd-demo.in` | `Advocate@123` | Sharma & Associates Chambers |
-| **Clerk (Staff)** | Suresh Verma | `suresh.clerk@advd-demo.in` | `Clerk@123` | Sharma & Associates Chambers |
-| **Advocate (Owner)** | Adv. Priya Deshmukh | `priya.deshmukh@advd-demo.in` | `Advocate@123` | Deshmukh Law Chambers (*Isolated*) |
+| Component | Platform |
+|---|---|
+| Frontend | Vercel |
+| Backend | Add actual hosting provider |
+| Database | MongoDB Atlas, if applicable |
 
-*(The login screen also features 1-Click Quick Demo sign-in buttons for immediate evaluator testing.)*
+**Live Application:** https://advocatedi.vercel.app/
+
+The frontend communicates with the backend through configured REST API endpoints.
+
+---
+
+## 🔐 Security Considerations
+
+- JWT-based authentication.
+- Role-based authorization.
+- Protected backend routes.
+- Workspace-level access control.
+- Clerk-to-advocate association.
+- Environment-based secret management.
+- Tenant-aware database queries.
+
+---
+
+## 🔮 Future Enhancements
+
+- Automated hearing reminders.
+- Advanced case document management.
+- Calendar synchronization.
+- Case activity timeline.
+- Advanced reporting and analytics.
+- Document export and PDF generation.
+- Additional collaboration features.
+
+---
+
+## 👨‍💻 Developer
+
+**Bhushan Gavhane**
+
+Computer Engineering Graduate | Full Stack Developer
+
+- GitHub: https://github.com/bhushan0919
+
+---
+
+<p align="center">
+  <b>Advocate Diary – Simplifying Legal Practice Through Technology. ⚖️</b>
+</p>
