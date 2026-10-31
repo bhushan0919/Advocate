@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { reportController } from '../controllers/report.controller.js';
 import { requireAuth } from '../middleware/auth.middleware.js';
 import { requireWorkspace } from '../middleware/tenant.middleware.js';
+import { exportLimiter } from '../middleware/rateLimiter.middleware.js';
 
 const router = Router();
 
@@ -29,11 +30,10 @@ router.get('/clients', reportController.getClientsReport);
 // 7. Staff & Workspace Workload Report
 router.get('/staff', reportController.getStaffReport);
 
-// 8. PDF Export (Printable Chamber Reports)
-router.get('/export/pdf', reportController.exportPdf);
+// 8. PDF Export (Printable Chamber Reports with DoS Rate Limiting)
+router.get('/export/pdf', exportLimiter, reportController.exportPdf);
 
-// 9. Excel Export (Structured XLSX Workbooks)
-router.get('/export/excel', reportController.exportExcel);
+// 9. Excel Export (Structured XLSX Workbooks with DoS Rate Limiting)
+router.get('/export/excel', exportLimiter, reportController.exportExcel);
 
 export default router;
-

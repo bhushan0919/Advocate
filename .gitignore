@@ -10,13 +10,20 @@ dist/
 build/
 */build/
 
-# Environment files
+# Environment files and credentials
 .env
 *.env
+.env.*
 .env.local
 .env.*.local
 !.env.example
 !*/.env.example
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
 
 # File uploads and temporary directories
 uploads/

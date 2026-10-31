@@ -1,10 +1,13 @@
 import { createApp } from './app.js';
 import { connectDB } from './config/db.js';
-import { ENV } from './config/env.js';
+import { ENV, validateEnv } from './config/env.js';
 import { schedulerService } from './services/scheduler.service.js';
 
 const startServer = async () => {
   try {
+    // Validate environment and critical secrets before bootstrapping
+    validateEnv();
+
     await connectDB();
 
     const app = createApp();

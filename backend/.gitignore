@@ -10,13 +10,21 @@ lerna-debug.log*
 dist/
 build/
 
-# Environment configuration
+# Environment configuration and secrets
 .env
+*.env
+.env.*
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 !.env.example
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
 
 # File uploads and local storage
 uploads/*

@@ -35,6 +35,7 @@ const runAllTests = async () => {
     await runScript('phase5-documents-reports.test.ts');
     await runScript('marathi-i18n.test.ts');
     await runScript('cloudinary-avatar.test.ts');
+    await runScript('security-audit.test.ts');
     console.log('\n======================================================');
     console.log('   ALL BACKEND TEST SUITES COMPLETED SUCCESSFULLY!    ');
     console.log('======================================================\n');

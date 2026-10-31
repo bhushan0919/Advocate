@@ -206,6 +206,8 @@ export const authController = {
 
       const user = await User.findOne({ email: normalizedEmail }).select('+passwordHash');
       if (!user) {
+        // Constant-time mitigation against email enumeration attacks via timing side-channels
+        await bcrypt.compare(password, '$2a$10$7vN3lM8kX1P2qR4tY6uI9eH5wA3sD2fG1hJ4kL7oP9qR2tY5uI8o');
         res.status(401).json({
           success: false,
           message: 'Invalid email or password credentials.',

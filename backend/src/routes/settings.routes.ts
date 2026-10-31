@@ -2,7 +2,9 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { settingsController } from '../controllers/settings.controller.js';
 import { requireAuth } from '../middleware/auth.middleware.js';
 import { requireWorkspace } from '../middleware/tenant.middleware.js';
+import { requireRole } from '../middleware/permission.middleware.js';
 import { uploadAvatarMiddleware } from '../middleware/avatar-upload.middleware.js';
+import { exportLimiter } from '../middleware/rateLimiter.middleware.js';
 
 const router = Router();
 
@@ -43,11 +45,11 @@ router.patch('/account/password', settingsController.changePassword);
 router.patch('/account/mobile', settingsController.updateMobile);
 router.post('/account/deactivate', settingsController.deactivateAccount);
 
-// 3. Workspace Settings (Advocate / Owner only enforced inside controller)
+// 3. Workspace Settings (Advocate / Owner only: Enforced at both route and controller levels)
 router.get('/workspace', settingsController.getWorkspaceSettings);
-router.patch('/workspace', settingsController.updateWorkspaceSettings);
-router.post('/workspace/logo', settingsController.updateWorkspaceLogo);
-router.delete('/workspace/logo', settingsController.deleteWorkspaceLogo);
+router.patch('/workspace', requireRole('owner', 'advocate'), settingsController.updateWorkspaceSettings);
+router.post('/workspace/logo', requireRole('owner', 'advocate'), settingsController.updateWorkspaceLogo);
+router.delete('/workspace/logo', requireRole('owner', 'advocate'), settingsController.deleteWorkspaceLogo);
 
 // 4. Regional & Appearance Preferences
 router.get('/preferences', settingsController.getPreferences);
@@ -61,9 +63,13 @@ router.get('/sessions', settingsController.getSessions);
 router.delete('/sessions/:id', settingsController.revokeSession);
 router.post('/sessions/revoke-others', settingsController.revokeOtherSessions);
 
-// 7. Data & Privacy
+// 7. Data & Privacy (Chamber export restricted to advocates/owners with rate limiting)
 router.get('/data-summary', settingsController.getDataSummary);
-router.get('/data-export', settingsController.exportWorkspaceData);
+router.get(
+  '/data-export',
+  requireRole('owner', 'advocate'),
+  exportLimiter,
+  settingsController.exportWorkspaceData
+);
 
 export default router;
-
